@@ -43,17 +43,17 @@ nrgy_list = []
 for line in df['nrgy']:
     nrgy_list.append(line)
 
-"""
+
 # Scatter Plot
-fig = px.scatter(df, x=pop_list, y=dnce_list, labels={"x": "Popularity", "y": "Danceability"})
+fig = px.scatter(df, df["pop"], df["dnce"], labels={"pop": "Popularity", "dnce": "Danceability"})
 fig.show()
-"""
+
 # Aufgabe 12 a+b
 
 # Histogram
 histogram = px.histogram(df, x=nrgy_list, labels={"x": "Energy"})
-histogram.show()
+#histogram.show()
 
 # Scatterplot matrix
 scatter_matrix = px.scatter_matrix(df, dimensions=["acous", "live", "nrgy", "val", "dnce"], color="pop")
-scatter_matrix.show()
+#scatter_matrix.show()
