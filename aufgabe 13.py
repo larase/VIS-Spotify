@@ -12,7 +12,7 @@ df = pd.read_csv('https://raw.githubusercontent.com/elyesmanai/Data-Science-Data
 # gestalten der App
 app = dash.Dash(__name__)
 app.layout = html.Div([
-    html.H1('Aufgabe 13'),
+    html.H1('Aufgabe 13 und 14'),
     dcc.Dropdown(id='year-choice',
                  options=[{'label': x, 'value': x}
                           for x in sorted(df.year.unique())],
@@ -21,7 +21,9 @@ app.layout = html.Div([
 
     dcc.Graph(id='my-graph', figure={}),
 
-    dcc.Graph(id='scatter', figure={})
+    dcc.Graph(id='scatter', figure={}),
+
+     dcc.Graph(id='third', figure={})
 ])
 
 
@@ -29,6 +31,7 @@ app.layout = html.Div([
 @app.callback(
     Output(component_id='my-graph', component_property='figure'),
     Output(component_id='scatter', component_property='figure'),
+    Output(component_id='third', component_property='figure'),
     Input(component_id='year-choice', component_property='value')
 )
 
@@ -36,11 +39,13 @@ def update(value_year):
     dff = df[df.year == value_year]
     # Plotly
     figure = px.bar(data_frame=dff, x='artist', y='year')
-    scatter = px.scatter(dff, x="pop", y="dnce", color="dur", size="bpm", hover_data=["artist"],
-                         marginal_x="box", marginal_y="box" # , trendline="ols"
-    )
 
-    return figure, scatter
+    scatter = px.scatter(dff, x="pop", y="dnce", color="dur", size="bpm", hover_data=["artist"],
+                         marginal_x="box", marginal_y="box", trendline="ols")
+
+    third = px.scatter_matrix(dff, dimensions=["dnce", "val", "pop", "live", "acous", "spch"], color="dur")
+
+    return figure, scatter, third
 
 
 if __name__ == '__main__':
