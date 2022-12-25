@@ -21,7 +21,11 @@ app.layout = html.Div([
     dcc.Dropdown(id='artist-choice',
                  options=[{'label': x, 'value': x}
                           for x in sorted(df.artist.unique())],
-                 value='Drake'
+                 value='Demi Lovato'
+                 ),
+    dcc.Dropdown(id='value-choice',
+                options=['nrgy', 'liv', 'dnce', 'live', 'val', 'dur', 'acous', 'spch', 'pop'],
+                value='nrgy'
                  ),
     dcc.Graph(id='my-graph', figure={})
 ])
@@ -30,15 +34,16 @@ app.layout = html.Div([
 @app.callback(
     Output(component_id='my-graph', component_property='figure'),
     [Input(component_id='year-choice', component_property='value'),
-    Input(component_id='artist-choice', component_property='value')]
+    Input(component_id='artist-choice', component_property='value'),
+    Input(component_id='value-choice', component_property='value'),]
 )
 
-def update(value_year, value_artist):
+def update(value_year, value_artist, value_value):
     dff = df[df.year == value_year]
     dff = df[df.artist == value_artist]
     # Plotly
-    figure = px.bar(data_frame=dff, x='title', y='pop',
-                    title="Songs von "+value_artist+" im Jahr "+value_year)
+    figure = px.bar(data_frame=dff, x='title', y=value_value,
+                    title="Songs von "+value_artist+" im Jahr "+value_year+", verglichen anhand "+value_value)
 
     return figure
 
