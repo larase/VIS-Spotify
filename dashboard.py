@@ -16,7 +16,7 @@ app.layout = html.Div([
     dcc.Dropdown(id='year-choice',
                  options=[{'label': x, 'value': x}
                           for x in sorted(df.year.unique())],
-                 value='2010'
+                 value='2013'
                  ),
     dcc.Dropdown(id='artist-choice',
                  options=[{'label': x, 'value': x}
@@ -24,8 +24,16 @@ app.layout = html.Div([
                  value='Demi Lovato'
                  ),
     dcc.Dropdown(id='value-choice',
-                options=['nrgy', 'liv', 'dnce', 'live', 'val', 'dur', 'acous', 'spch', 'pop'],
-                value='nrgy'
+                options=[
+                    {'label': 'Energy', 'value': 'nrgy'},
+                    {'label': 'Liveness', 'value': 'liv'},
+                    {'label': 'Dancability', 'value': 'dnce'},
+                    {'label': 'Valence', 'value': 'val'},
+                    {'label': 'Durability', 'value': 'dur'},
+                    {'label': 'Acousticness', 'value': 'acous'},
+                    {'label': 'Speech', 'value': 'spch'},
+                    {'label': 'Popularity', 'value': 'pop'}],
+                value='pop'
                  ),
     dcc.Graph(id='my-graph', figure={})
 ])
@@ -35,16 +43,17 @@ app.layout = html.Div([
     Output(component_id='my-graph', component_property='figure'),
     [Input(component_id='year-choice', component_property='value'),
     Input(component_id='artist-choice', component_property='value'),
-    Input(component_id='value-choice', component_property='value'),]
+    Input(component_id='value-choice', component_property='value')]
 )
 
 def update(value_year, value_artist, value_value):
+    dff = df.copy()
     dff = df[df.year == value_year]
     dff = df[df.artist == value_artist]
     # Plotly
-    figure = px.bar(data_frame=dff, x='title', y=value_value,
-                    title="Songs von "+value_artist+" im Jahr "+value_year+", verglichen anhand "+value_value)
-
+    figure = px.bar(data_frame=dff, x='title', y=value_value #,
+    #                title="Songs von "+value_artist+" im Jahr "+value_year+", verglichen anhand "+value_value
+                    )
     return figure
 
 if __name__ == '__main__':
