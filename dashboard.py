@@ -48,8 +48,8 @@ app.layout = html.Div([
 
 def update(value_year, value_artist, value_value):
     dff = df.copy()
-    dff = df[df.year == value_year]
-    dff = df[df.artist == value_artist]
+    dff = dff[df.year == value_year]
+    dff = dff[df.artist == value_artist]
     # Plotly
     figure = px.bar(data_frame=dff, x='title', y=value_value #,
     #                title="Songs von "+value_artist+" im Jahr "+value_year+", verglichen anhand "+value_value
