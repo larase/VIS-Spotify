@@ -72,22 +72,33 @@ app.layout = dbc.Container([
         dbc.Col([
             #einfügen der 1.Grafik
             html.Label('Unsere 1. Grafik'),
-            dcc.Graph(id='my-graph', figure={})]
+            dcc.Graph(id='bar', figure={})]
                 )]),
     
         dbc.Col([
                 #einfügen der 2.Grafik
                 html.Label('Unsere 2. Grafik/Platzhalter'),
-                dcc.Graph(id='my-graph2', figure={})]#leere grafik als platzhalter
-                    )
+                dcc.Graph(id='scatter', figure={})]),
 
+        dbc.Col([
+                #einfügen der 3.Grafik
+                html.Label('Unsere 3. Grafik/Platzhalter'),
+                dcc.Graph(id='line_chart', figure={})]),
+
+        dbc.Col([
+                #einfügen der 4.Grafik
+                html.Label('Unsere 4. Grafik/Platzhalter'),
+                dcc.Graph(id='spider', figure={})])
     
     ])
 #ende des Designblockes
 
 #callback einbauen
 @app.callback(
-    Output(component_id='my-graph', component_property='figure'),
+    [Output(component_id='bar', component_property='figure'),
+    Output(component_id='scatter', component_property='figure'),
+    Output(component_id='line_chart', component_property='figure'),
+    Output(component_id='spider', component_property='figure')],
     [Input(component_id='year-choice', component_property='value'),
     Input(component_id='artist-choice', component_property='value'),
     Input(component_id='value-choice', component_property='value')]
@@ -100,9 +111,15 @@ def update(value_year, value_artist, value_value):
     dff = dff[df.year == value_year]
     dff = dff[df.artist == value_artist]
     # Plotly
-    figure = px.bar(data_frame=dff, x='title', y=value_value #,
+    bar = px.bar(data_frame=dff, x='title', y=value_value #,
     #                title="Songs von "+value_artist+" im Jahr "+value_year+", verglichen anhand "+value_value
                     )
-    return figure
+    scatter = px.scatter(data_frame=dff, x=value_year, y=value_value)
+    line_chart = px.line(dff, x=value_year, y="pop")
+
+    #spider kommt hier
+
+    return bar, scatter, line_chart#, spider
+
 if __name__ == '__main__':
     app.run_server()
