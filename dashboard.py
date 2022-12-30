@@ -74,22 +74,22 @@ app.layout = dbc.Container([
             html.Label('Unsere 1. Grafik'),
             dcc.Graph(id='bar', figure={})]
                 )]),
-    
+
         dbc.Col([
                 #einfügen der 2.Grafik
-                html.Label('Unsere 2. Grafik/Platzhalter'),
+                html.Label('Unsere 2. Grafik'),
                 dcc.Graph(id='scatter', figure={})]),
 
         dbc.Col([
                 #einfügen der 3.Grafik
-                html.Label('Unsere 3. Grafik/Platzhalter'),
+                html.Label('Unsere 3. Grafik'),
                 dcc.Graph(id='line_chart', figure={})]),
-
+"""
         dbc.Col([
                 #einfügen der 4.Grafik
-                html.Label('Unsere 4. Grafik/Platzhalter'),
+                html.Label('Unsere 4. Grafik'),
                 dcc.Graph(id='spider', figure={})])
-    
+"""
     ])
 #ende des Designblockes
 
@@ -97,8 +97,7 @@ app.layout = dbc.Container([
 @app.callback(
     [Output(component_id='bar', component_property='figure'),
     Output(component_id='scatter', component_property='figure'),
-    Output(component_id='line_chart', component_property='figure'),
-    Output(component_id='spider', component_property='figure')],
+    Output(component_id='line_chart', component_property='figure')],
     [Input(component_id='year-choice', component_property='value'),
     Input(component_id='artist-choice', component_property='value'),
     Input(component_id='value-choice', component_property='value')]
@@ -108,14 +107,13 @@ def update(value_year, value_artist, value_value):
     dff = df.copy()
     dff = df[df.year == value_year]
     dff = df[df.artist == value_artist]
-    dff = dff[df.year == value_year]
-    dff = dff[df.artist == value_artist]
+
     # Plotly
     bar = px.bar(data_frame=dff, x='title', y=value_value #,
     #                title="Songs von "+value_artist+" im Jahr "+value_year+", verglichen anhand "+value_value
                     )
-    scatter = px.scatter(data_frame=dff, x=value_year, y=value_value)
-    line_chart = px.line(dff, x=value_year, y="pop")
+    scatter = px.scatter(data_frame=dff, x="title", y=value_value)
+    line_chart = px.line(dff, x="year", y=value_value)
 
     #spider kommt hier
 
