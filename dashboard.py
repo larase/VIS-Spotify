@@ -33,8 +33,8 @@ app.layout = dbc.Container([
             html.Label('Jahresauswahl'),
             dcc.Dropdown(id='year-choice',
                  options=[{'label': x, 'value': x}
-                          for x in sorted(df.year.unique())],
-                 value='2010'
+                          for x in sorted(df.year.unique())] + [{'label': 'Alle Jahre', 'value': 'all_values'}],
+                 value='Alle Jahre'
                  ),
         ]
                 ,width=3)]),
@@ -106,12 +106,16 @@ app.layout = dbc.Container([
 
 def update(value_year, value_artist, value_value):
     dff = df.copy()
-    dff = df[df.year == value_year]
+    if value_year == 'all_values':
+        print("all")
+    else:
+        dff = df[df.year == value_year]
+
     dff = df[df.artist == value_artist]
 
     # Plotly Diagramme
     bar = px.bar(data_frame=dff, x='title', y=value_value #,
-    #                title="Songs von "+value_artist+" im Jahr "+value_year+", verglichen anhand "+value_value
+    #title="Songs von "+value_artist+" im Jahr "+value_year+", verglichen anhand "+value_value
                     )
     scatter = px.scatter(data_frame=dff, x="title", y=value_value)
 
