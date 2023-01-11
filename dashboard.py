@@ -34,7 +34,7 @@ app.layout = dbc.Container([
             dcc.Dropdown(id='year-choice',
                  options=[{'label': x, 'value': x}
                           for x in sorted(df.year.unique())] + [{'label': 'Alle Jahre', 'value': 'all_values'}],
-                 value='Alle Jahre'
+                 value='all_values'
                  ),
         ]
                 ,width=3)]),
@@ -45,7 +45,7 @@ app.layout = dbc.Container([
             html.Label('Künstlerauswahl'),
             dcc.Dropdown(id='artist-choice',
                  options=[{'label': x, 'value': x}
-                          for x in sorted(df.artist.unique())],
+                          for x in sorted(df.artist.unique())] + [{'label': 'Alle Künstler', 'value': 'all_values'}],
                          value='Drake')
         ]
                 ,width=3)
@@ -71,23 +71,23 @@ app.layout = dbc.Container([
         [
         dbc.Col([
             #einfügen der 1.Grafik
-            html.Label('Unsere 1. Grafik'),
+            html.Label('Balkendiagramm'),
             dcc.Graph(id='bar', figure={})]
                 )]),
 
         dbc.Col([
                 #einfügen der 2.Grafik
-                html.Label('Unsere 2. Grafik'),
+                html.Label('Streudiagramm'),
                 dcc.Graph(id='scatter', figure={})]),
 
         dbc.Col([
                 #einfügen der 3.Grafik
-                html.Label('Unsere 3. Grafik'),
+                html.Label('Liniendiagramm'),
                 dcc.Graph(id='line_chart', figure={})]),
 
         dbc.Col([
                 #einfügen der 4.Grafik
-                html.Label('Unsere 4. Grafik'),
+                html.Label('Spiderdiagramm'),
                 dcc.Graph(id='spider', figure={})])
 
     ])
@@ -106,12 +106,17 @@ app.layout = dbc.Container([
 
 def update(value_year, value_artist, value_value):
     dff = df.copy()
+    # Filterwert für Jahre auswerten
     if value_year == 'all_values':
         print("all")
     else:
         dff = df[df.year == value_year]
 
-    dff = df[df.artist == value_artist]
+    # Filterwert für Künstler auswerten
+    if value_artist == 'all_values':
+        print("all artists")
+    else:
+        dff = df[df.artist == value_artist]
 
     # Plotly Diagramme
     bar = px.bar(data_frame=dff, x='title', y=value_value #,
